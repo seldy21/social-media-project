@@ -1,0 +1,256 @@
+$font:-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue';
+$background: #000329;
+$activeBackground: #000436;
+$white: #ffffff;
+$border:#708090;
+$primary: #1e90ff;
+$primaryHover: #1670ca;
+$secondary: #a9a9a9;
+$activeBorder: #4682b4;
+$danger: #dd4141;
+$dangerHover: #ca0303;
+$gray: #808080;
+$darkGray: #505050;
+
+body {
+  margin: 0;
+  font-family: $font;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  background-color: $background;
+  color: $white;
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+}
+
+.layout {
+  max-width: 600px;
+  margin: 0 auto;
+  position: relative;
+  border-left: 1px solid $border;
+  border-right: 1px solid $border;
+  min-height: 100vh;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;  
+  z-index: 99;
+  width: 100%;
+  max-width: 600px;
+  margin:0 auto;
+  background-color: transparent;
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    background-color: transparent;
+
+    button {
+      border : none;
+      display: flex;
+      gap: 0.25rem;
+      justify-content: center;
+      align-items: center;
+      font-size: 0.9rem;
+      padding: 1rem;
+      background-color: transparent;
+      backdrop-filter: blur(10px);
+    }
+  }
+}
+
+.button {
+  padding: 0.2rem 0.8rem;
+  border-radius: 999px;
+  font-size: 12px;
+  line-height: 1.25rem;
+  font-weight: 600;
+  border:none;
+  box-shadow: 0 1px 2px 0 $border;
+  cursor: pointer;
+}
+
+.home  {
+  &__title{ 
+    padding: 16px;
+    font-weight: 700;
+    font-size: 20px;
+  }
+
+  &__tabs {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  &__tab {
+    text-align: center;
+    font-weight: 500;
+    padding: 1rem;
+    cursor: pointer;
+
+    &-active {
+      font-weight: 700;
+      border-bottom: 3px solid $activeBorder;
+    }
+
+    &:hover , &focus {
+      background-color: $activeBackground;
+      color: $white;
+    }
+  }
+}
+
+.post-form {
+  &__textarea {
+    font-family: $font;
+    min-height: 12rem;
+    display: block;
+    width: 100%;
+    border :none;
+    resize: none;
+    outline: none;
+    font-size: 20px;
+    border-bottom: 1px solid $border;
+    padding: 1rem
+  }
+
+  &::placeholder {
+    color: $secondary;
+    font-family: $font;
+    font-size: 20px;
+  }
+
+  &__submit-area {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid $border;
+
+    .post-form__file {
+      display: flex;
+      padding: 0 1rem;
+      flex-direction: column;
+      cursor: pointer;
+      justify-content: center;
+
+      &-icon {
+        font-size: 20px;
+      }
+
+    }
+    .hidden {
+      display: none;
+    }
+
+  }
+
+  &__submit-btn {
+    @extend .button;
+    background-color: $primary;
+    font-size: 1rem;
+  }
+}
+
+
+//post layout
+.post {
+  padding-bottom: 40px;
+
+  &__flex {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    // padding: 0 1rem 0;
+  }
+
+  &__email,
+  &__createdAt {
+    font-size: 12px;
+    color: $secondary;
+  }
+
+  &__box {
+    padding: 0.7rem;
+    border-bottom: 1px solid $border;
+
+    &-profile{
+      padding: 0 0.7rem;
+
+      &-img, 
+      &-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 0.7rem;
+      }
+    }
+    
+    &-content {
+      display: block;
+      font-weight: 500;
+      padding: 1rem 0.25rem
+    }
+
+    &-footer {
+      padding: 0 1rem;
+      margin-top: 0.7rem;
+      font-size: 14px;
+      display: flex;
+      gap: 0.5rem;
+      flex-direction: row-reverse;
+
+      button {
+        @extend .button;
+
+        &.post__delete {
+          background-color: $danger;
+          color: $white;
+
+          &:hover,
+          &:focus {
+            background-color: $dangerHover;
+          }
+        }
+
+        &.post__edit {
+          background-color: $gray;
+
+          &:hover,
+          &:focus {
+            background-color: $darkGray;
+          }
+
+          a {
+            background-color: transparent;
+            &:hover,
+            &:focus {
+              background-color: $darkGray;
+            }
+          }
+        }
+        
+      &.post__like,
+      &.post__comments {
+        @extend .post__flex;
+
+        &:hover,
+        &:focus {
+          color: $gray;
+        }
+      }
+      }
+    }
+  }
+}
