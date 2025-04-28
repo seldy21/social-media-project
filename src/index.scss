@@ -305,6 +305,26 @@ a {
     &:focus {
       background-color: $primaryHover;
     }
+
+    &__google {
+      background-color: $white;
+      color:#000329;
+
+      &:hover,
+      &:focus {
+        background-color: $lightGray;
+      }
+    }
+
+    &__github {
+      background-color: $gray;
+
+      &:hover,
+      &:focus {
+        color: #000;
+        background-color: $lightGray;
+      }
+    }
   }
 
   &__link {
