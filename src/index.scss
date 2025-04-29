@@ -19,16 +19,29 @@ body {
   font-family: $font;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: $background;
 }
 
 * {
-  background-color: $background;
   color: $white;
   box-sizing: border-box;
 }
 
 a {
   text-decoration: none;
+}
+
+.transparent {
+  background-color: transparent;
+  backdrop-filter: blur(10px);
+}
+
+.sticky {
+  width: 100%;
+  position: sticky;
+  max-width: 600px;
+  margin: 0 auto;
+  top:0;;
 }
 
 .layout {
@@ -38,6 +51,8 @@ a {
   border-left: 1px solid $border;
   border-right: 1px solid $border;
   min-height: 100vh;
+  
+  background-color: $background;
 }
 
 .footer {
@@ -82,6 +97,11 @@ a {
 }
 
 .home  {
+  &__top {
+    @extend .transparent;
+    @extend .sticky;
+  }
+
   &__title{ 
     padding: 16px;
     font-weight: 700;
@@ -123,7 +143,8 @@ a {
     outline: none;
     font-size: 20px;
     border-bottom: 1px solid $border;
-    padding: 1rem
+    padding: 1rem;
+    background-color: $background;
   }
 
   &::placeholder {
@@ -168,6 +189,15 @@ a {
 //post layout
 .post {
   padding-bottom: 40px;
+
+  &__no-post {
+    padding :1rem;
+    margin: 1rem;
+    font-size: 0.9rem;
+    border: 1px solid $border;
+    border-radius: 10px;
+
+  }
 
   &__flex {
     display: flex;
@@ -245,6 +275,8 @@ a {
       &.post__like,
       &.post__comments {
         @extend .post__flex;
+        background-color: transparent;
+        box-shadow: none;
 
         &:hover,
         &:focus {
