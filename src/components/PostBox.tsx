@@ -107,41 +107,13 @@ export default function PostBox({ post }: PostBoxProps) {
   };
 
   //해시태그 검색
-  const searchTag = async (tag: string) => {
-    console.log(tag);
-    try {
-      const postQuery = query(
-        collection(db, "posts"),
-        where("hashTags", "array-contains", tag),
-        orderBy("createdAt", "desc")
-      );
-
-      onSnapshot(postQuery, (snapshot) => {
-        const postsData = snapshot.docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-        }));
-        console.log(postsData);
-        navigate("/search", {
-          state: { tagQuery: tag },
-        });
-      });
-
-      // const querySnapshot = await getDocs(postQuery);
-
-      // querySnapshot.forEach((doc) => {
-      //   // doc.data() is never undefined for query doc snapshots
-
-      //   console.log(doc.id, " => ", doc.data());
-
-      // });
-    } catch (error) {
-      console.error("Error getting documents: ", error);
-    }
+  const searchTag = (tag: string) => {
+    navigate("/search", {
+      state: { tagQuery: tag },
+    });
   };
   return (
     <div className="post__box" key={post.id}>
-      {/* <Link to={`/posts/${post.id}`} className="post__link"> */}
       <div className="post__box-profile">
         <div className="post__flex">
           {post?.profileUrl ? (
@@ -196,7 +168,6 @@ export default function PostBox({ post }: PostBoxProps) {
           )}
         </div>
       </div>
-      {/* </Link> */}
       <div className="post__box-footer">
         {editStatus && (
           <>
