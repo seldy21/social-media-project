@@ -1,11 +1,10 @@
 import AuthContext from "context/AuthContext";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { db } from "firebaseApp";
 import { PostProps } from "pages/home";
 import { useContext, useState } from "react";
 import { FaCircleUser, FaRegCommentDots } from "react-icons/fa6";
 import { IoIosHeartEmpty } from "react-icons/io";
-import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
 interface PostBoxProps {
@@ -14,7 +13,17 @@ interface PostBoxProps {
 
 export default function PostBox({ post }: PostBoxProps) {
   const { user } = useContext(AuthContext);
-  const handleDelete = () => {};
+  const handleDelete = async() => {
+
+    try {
+      await deleteDoc(doc(db, "posts", post.id));
+      toast.success("게시글을 삭제하였습니다👍!");
+    } catch (error) {
+      console.error("Error deleting document: ", error);
+      toast.error("게시글 삭제에 실패하였습니다😢!");
+    }
+  
+  };
 
   const [editStatus, setEditStatus] = useState<boolean>(false);
   const [editContent, setEditContent] = useState<string>(post.content);
@@ -30,9 +39,9 @@ export default function PostBox({ post }: PostBoxProps) {
     setEditContent(value);
   };
 
-  const handleCancel = () => {
+  const handleCancel =  () => {
     setEditStatus(false);
-  };
+  }
 
   const handleSave = async () => {
     try {
@@ -43,12 +52,10 @@ export default function PostBox({ post }: PostBoxProps) {
       });
       setEditStatus(false);
       toast.success("게시글을 수정하였습니다👍!");
-
     } catch (error) {
       console.error("Error updating document: ", error);
       toast.error("게시글 수정에 실패하였습니다😢!");
     }
-   
   };
   return (
     <div className="post__box" key={post.id}>
