@@ -14,7 +14,9 @@ interface PostBoxProps {
 export default function PostBox({ post }: PostBoxProps) {
   const { user } = useContext(AuthContext);
   const handleDelete = async() => {
-
+    const confirm = window.confirm("정말로 삭제하시겠습니까?")   
+    
+    if(!confirm) return;
     try {
       await deleteDoc(doc(db, "posts", post.id));
       toast.success("게시글을 삭제하였습니다👍!");
