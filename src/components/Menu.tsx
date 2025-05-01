@@ -1,4 +1,4 @@
-import { IoIosHome } from "react-icons/io";
+import { IoIosHome, IoMdSearch } from "react-icons/io";
 import { CgProfile } from "react-icons/cg";
 import { useNavigate } from "react-router-dom";
 import { FiLogIn, FiLogOut } from "react-icons/fi";
@@ -35,6 +35,9 @@ const onSignOut = async () => {
         <button type="button" onClick={() => navigate("/profile")}>
           <CgProfile />
           PROFILE
+        </button>        <button type="button" onClick={() => navigate("/search")}>
+          <IoMdSearch />
+          SEARCH
         </button>
         {user === null ? (
           <button type="button" onClick={() => navigate("/")}>

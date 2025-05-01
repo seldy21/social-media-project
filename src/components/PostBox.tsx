@@ -7,12 +7,15 @@ import {
   collection,
   where,
   getDocs,
+  orderBy,
+  onSnapshot,
 } from "firebase/firestore";
 import { db } from "firebaseApp";
 import { PostProps } from "pages/home";
 import { useContext, useRef, useState } from "react";
 import { FaCircleUser, FaRegCommentDots } from "react-icons/fa6";
 import { IoIosHeartEmpty } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 interface PostBoxProps {
@@ -21,6 +24,7 @@ interface PostBoxProps {
 
 export default function PostBox({ post }: PostBoxProps) {
   const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
   const handleDelete = async () => {
     const confirm = window.confirm("정말로 삭제하시겠습니까?");
 
@@ -105,14 +109,35 @@ export default function PostBox({ post }: PostBoxProps) {
   //해시태그 검색
   const searchTag = async (tag: string) => {
     console.log(tag);
-    const q = query(collection(db, "posts"), where("hashTags", "array-contains", tag));
+    try {
+      const postQuery = query(
+        collection(db, "posts"),
+        where("hashTags", "array-contains", tag),
+        orderBy("createdAt", "desc")
+      );
 
-    const querySnapshot = await getDocs(q);
+      onSnapshot(postQuery, (snapshot) => {
+        const postsData = snapshot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+        console.log(postsData);
+        navigate("/search", {
+          state: { tagQuery: tag },
+        });
+      });
 
-    querySnapshot.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
-      console.log(doc.id, " => ", doc.data());
-    });
+      // const querySnapshot = await getDocs(postQuery);
+
+      // querySnapshot.forEach((doc) => {
+      //   // doc.data() is never undefined for query doc snapshots
+
+      //   console.log(doc.id, " => ", doc.data());
+
+      // });
+    } catch (error) {
+      console.error("Error getting documents: ", error);
+    }
   };
   return (
     <div className="post__box" key={post.id}>
