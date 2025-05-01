@@ -230,7 +230,16 @@ a {
     &-content {
       display: block;
       font-weight: 500;
-      padding: 1rem 0.25rem
+      padding: 1rem 0.25rem;
+
+      textarea {
+        width: 100%;
+        resize : none;
+        border-radius: 10px;
+        height: 10rem;
+        @extend .transparent;
+        padding: 1rem;
+      }
     }
 
     &-footer {
@@ -254,7 +263,7 @@ a {
           }
         }
 
-        &.post__edit {
+        &.post__edit, &.post__cancel {
           background-color: $gray;
 
           &:hover,
@@ -268,6 +277,16 @@ a {
             &:focus {
               background-color: $darkGray;
             }
+          }
+        }
+
+        &.post__save {
+          background-color: $primary;
+          color: $white;
+
+          &:hover,
+          &:focus {
+            background-color: $primaryHover;
           }
         }
         
