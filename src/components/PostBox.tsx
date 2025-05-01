@@ -1,5 +1,13 @@
 import AuthContext from "context/AuthContext";
-import { doc, updateDoc, deleteDoc } from "firebase/firestore";
+import {
+  doc,
+  updateDoc,
+  deleteDoc,
+  query,
+  collection,
+  where,
+  getDocs,
+} from "firebase/firestore";
 import { db } from "firebaseApp";
 import { PostProps } from "pages/home";
 import { useContext, useRef, useState } from "react";
@@ -40,7 +48,35 @@ export default function PostBox({ post }: PostBoxProps) {
     setEditContent(value);
   };
 
+  //수정 시 태그 삭제
+  const [tags, setTags] = useState<string[]>(post?.hashTags ?? []);
+  const deleteTag = (tag: any) => {
+    setTags((prev) => prev.filter((t) => t !== tag));
+  };
+
+  const [hashtag, setHashtag] = useState<string>("");
+  const onChangeHashtag = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const {
+      target: { value },
+    } = e;
+    setHashtag(value);
+  };
+
+  const handleKeyUp = (e: any) => {
+    if (e.keyCode === 32 && e.target.value.trim() !== "") {
+      const newTag = e.target.value.trim();
+      if (tags.includes(newTag)) {
+        toast.error("이미 존재하는 태그입니다.");
+        return;
+      }
+      setTags((prev) => [...prev, newTag]);
+      setHashtag("");
+    }
+  };
+
   const handleCancel = () => {
+    setEditContent(post.content);
+    setTags(post?.hashTags ?? []);
     setEditStatus(false);
   };
 
@@ -50,6 +86,7 @@ export default function PostBox({ post }: PostBoxProps) {
 
       await updateDoc(postRef, {
         content: editContent,
+        hashTags: tags,
       });
       setEditStatus(false);
       toast.success("게시글을 수정하였습니다👍!");
@@ -63,6 +100,19 @@ export default function PostBox({ post }: PostBoxProps) {
   const commentAreaRef = useRef<HTMLDivElement>(null);
   const showCommentArea = () => {
     commentAreaRef.current?.classList.toggle("show");
+  };
+
+  //해시태그 검색
+  const searchTag = async (tag: string) => {
+    console.log(tag);
+    const q = query(collection(db, "posts"), where("hashTags", "array-contains", tag));
+
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+      console.log(doc.id, " => ", doc.data());
+    });
   };
   return (
     <div className="post__box" key={post.id}>
@@ -82,6 +132,42 @@ export default function PostBox({ post }: PostBoxProps) {
             <textarea value={editContent} onChange={onChange}></textarea>
           ) : (
             post?.content
+          )}
+        </div>
+
+        <div className="post-form__hashtags-output">
+          {editStatus ? (
+            <>
+              {tags.map((tag, index) => (
+                <span
+                  key={`hash_${post.createdAt}_${index}`}
+                  className="post-form__hashtags-tag"
+                  onClick={() => deleteTag(tag)}
+                >
+                  #{tag}
+                </span>
+              ))}
+              <input
+                type="text"
+                className="post-form__input"
+                id="hashtag"
+                name="hashtag"
+                placeholder="스페이스바로 태그 입력"
+                onKeyUp={handleKeyUp}
+                onChange={onChangeHashtag}
+                value={hashtag}
+              />
+            </>
+          ) : (
+            post?.hashTags?.map((tag, index) => (
+              <span
+                key={`hash_${post.createdAt}_${index}`}
+                className="post-form__hashtags-tag"
+                onClick={() => searchTag(tag)}
+              >
+                #{tag}
+              </span>
+            ))
           )}
         </div>
       </div>
@@ -120,15 +206,16 @@ export default function PostBox({ post }: PostBoxProps) {
             <IoIosHeartEmpty />
             {post?.likeCount ?? 0}
           </button>
-          <button type="button" className="post__comments" onClick={showCommentArea} >
-            <FaRegCommentDots />{" "}
-            {post?.comments?.length ?? 0}
+          <button
+            type="button"
+            className="post__comments"
+            onClick={showCommentArea}
+          >
+            <FaRegCommentDots /> {post?.comments?.length ?? 0}
           </button>
         </>
       </div>
-      <div ref={commentAreaRef} className="post__comment-area">
-        sadfsdf
-      </div>
+      <div ref={commentAreaRef} className="post__comment-area"></div>
     </div>
   );
 }
