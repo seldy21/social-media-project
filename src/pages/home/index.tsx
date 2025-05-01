@@ -32,7 +32,6 @@ export default function HomePage() {
           ...doc.data(),
           id: doc.id,
         }));
-        console.log(postsData)
         setPosts(postsData as PostProps[]);
       });
     }

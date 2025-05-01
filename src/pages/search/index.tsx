@@ -26,7 +26,6 @@ export default function SearchPage() {
           ...doc.data(),
           id: doc.id,
         }));
-        console.log(postsData);
 
         setPosts(postsData as PostProps[]);
       });

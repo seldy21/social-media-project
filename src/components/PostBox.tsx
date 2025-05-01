@@ -3,18 +3,14 @@ import {
   doc,
   updateDoc,
   deleteDoc,
-  query,
-  collection,
-  where,
-  getDocs,
-  orderBy,
-  onSnapshot,
+  arrayRemove,
+  arrayUnion,
 } from "firebase/firestore";
 import { db } from "firebaseApp";
 import { PostProps } from "pages/home";
 import { useContext, useRef, useState } from "react";
 import { FaCircleUser, FaRegCommentDots } from "react-icons/fa6";
-import { IoIosHeartEmpty } from "react-icons/io";
+import { IoIosHeart, IoIosHeartEmpty } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -112,6 +108,26 @@ export default function PostBox({ post }: PostBoxProps) {
       state: { tagQuery: tag },
     });
   };
+
+  //좋아요 기능
+  const toggleLike = async () => {
+    const postRef = doc(db, "posts", post.id);
+
+    // 좋아요를 누른 유저의 uid가 포함되어 있는지 확인해서 좋아요를 취소하거나 추가
+    if (user?.uid && post?.likes?.includes(user?.uid)) {
+      await updateDoc(postRef, {
+        likes: arrayRemove(user?.uid),
+        likeCount: post?.likeCount ? post?.likeCount - 1 : 0,
+      });
+      toast.success("좋아요를 취소하였습니다😯!");
+    } else {
+      await updateDoc(postRef, {
+        likes: arrayUnion(user?.uid),
+        likeCount: post?.likeCount ? post?.likeCount + 1 : 1,
+      });
+      toast.success("해당 게시물에 좋아요를 눌렀습니다😉!");
+    }
+  };
   return (
     <div className="post__box" key={post.id}>
       <div className="post__box-profile">
@@ -198,8 +214,12 @@ export default function PostBox({ post }: PostBoxProps) {
           </>
         )}
         <>
-          <button type="button" className="post__like">
-            <IoIosHeartEmpty />
+          <button type="button" className="post__like" onClick={toggleLike}>
+            {user?.uid && post?.likes?.includes(user?.uid) ? (
+              <IoIosHeart />
+            ) : (
+              <IoIosHeartEmpty />
+            )}
             {post?.likeCount ?? 0}
           </button>
           <button
