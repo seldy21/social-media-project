@@ -2,7 +2,7 @@ import AuthContext from "context/AuthContext";
 import { doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { db } from "firebaseApp";
 import { PostProps } from "pages/home";
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { FaCircleUser, FaRegCommentDots } from "react-icons/fa6";
 import { IoIosHeartEmpty } from "react-icons/io";
 import { toast } from "react-toastify";
@@ -13,10 +13,10 @@ interface PostBoxProps {
 
 export default function PostBox({ post }: PostBoxProps) {
   const { user } = useContext(AuthContext);
-  const handleDelete = async() => {
-    const confirm = window.confirm("정말로 삭제하시겠습니까?")   
-    
-    if(!confirm) return;
+  const handleDelete = async () => {
+    const confirm = window.confirm("정말로 삭제하시겠습니까?");
+
+    if (!confirm) return;
     try {
       await deleteDoc(doc(db, "posts", post.id));
       toast.success("게시글을 삭제하였습니다👍!");
@@ -24,7 +24,6 @@ export default function PostBox({ post }: PostBoxProps) {
       console.error("Error deleting document: ", error);
       toast.error("게시글 삭제에 실패하였습니다😢!");
     }
-  
   };
 
   const [editStatus, setEditStatus] = useState<boolean>(false);
@@ -41,9 +40,9 @@ export default function PostBox({ post }: PostBoxProps) {
     setEditContent(value);
   };
 
-  const handleCancel =  () => {
+  const handleCancel = () => {
     setEditStatus(false);
-  }
+  };
 
   const handleSave = async () => {
     try {
@@ -58,6 +57,12 @@ export default function PostBox({ post }: PostBoxProps) {
       console.error("Error updating document: ", error);
       toast.error("게시글 수정에 실패하였습니다😢!");
     }
+  };
+
+  //코멘트창 열기
+  const commentAreaRef = useRef<HTMLDivElement>(null);
+  const showCommentArea = () => {
+    commentAreaRef.current?.classList.toggle("show");
   };
   return (
     <div className="post__box" key={post.id}>
@@ -115,10 +120,14 @@ export default function PostBox({ post }: PostBoxProps) {
             <IoIosHeartEmpty />
             {post?.likeCount ?? 0}
           </button>
-          <button type="button" className="post__comments">
-            <FaRegCommentDots /> {post?.comments?.length ?? 0}
+          <button type="button" className="post__comments" onClick={showCommentArea} >
+            <FaRegCommentDots />{" "}
+            {post?.comments?.length ?? 0}
           </button>
         </>
+      </div>
+      <div ref={commentAreaRef} className="post__comment-area">
+        sadfsdf
       </div>
     </div>
   );

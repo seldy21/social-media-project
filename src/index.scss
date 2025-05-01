@@ -296,14 +296,25 @@ a {
         background-color: transparent;
         box-shadow: none;
 
-        &:hover,
-        &:focus {
+        &:hover {
           color: $gray;
         }
       }
       }
     }
   }
+
+  &__comment-area {
+    height: 0;
+    transition: .5s;
+    overflow: hidden;
+
+    &.show {
+      height: 300px;
+      overflow: auto;
+    }
+  }
+
 }
 
 //form 레이아웃
