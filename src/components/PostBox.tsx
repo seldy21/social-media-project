@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import CommentForm from "./comments/CommentForm";
 import CommentBox, { CommentProps } from "./comments/CommentBox";
+import FollowingBox from "./following/FollowingBox";
 
 interface PostBoxProps {
   post: PostProps;
@@ -141,6 +142,7 @@ export default function PostBox({ post }: PostBoxProps) {
           )}
           <div className="post__email">{post?.email}</div>
           <div className="post__createdAt">{post?.createdAt}</div>
+          {user?.uid !== post.uid && <FollowingBox post={post} />}
         </div>
         <div className="post__box-content">
           {editStatus ? (
