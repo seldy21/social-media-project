@@ -1,7 +1,9 @@
 import AuthContext from "context/AuthContext";
 import {
+  addDoc,
   arrayRemove,
   arrayUnion,
+  collection,
   doc,
   onSnapshot,
   setDoc,
@@ -44,8 +46,23 @@ export default function FollowingBox({ post }: FollowingProps) {
           users: arrayUnion({ id: user?.uid }),
         },
         { merge: true }
-
       );
+
+      //팔로잉 알림
+      await addDoc(collection(db, "notifications"), {
+        createdAt: new Date().toLocaleDateString("ko", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        }),
+        content: `${user?.email}님이 당신을 팔로우 하였습니다.`,
+        url: "#",
+        isRead: false,
+        uid: post?.uid,
+      });
       toast.success("팔로우 하였습니다! 😎");
     } catch (error) {}
   };
