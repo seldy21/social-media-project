@@ -35,7 +35,7 @@ export default function SearchPage() {
   useEffect(() => {
     console.log(location?.state?.tagQuery);
     location?.state?.tagQuery && setTagQuery(location?.state?.tagQuery ?? "");
-  }, [location.search]);
+  }, [location.search, location?.state]);
 
   return (
     <div className="home">

@@ -16,12 +16,14 @@ import { toast } from "react-toastify";
 import CommentForm from "./comments/CommentForm";
 import CommentBox, { CommentProps } from "./comments/CommentBox";
 import FollowingBox from "./following/FollowingBox";
+import { Link } from "react-router-dom";
 
 interface PostBoxProps {
   post: PostProps;
+  isDetail?: boolean;
 }
 
-export default function PostBox({ post }: PostBoxProps) {
+export default function PostBox({ post, isDetail }: PostBoxProps) {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const handleDelete = async () => {
@@ -102,6 +104,7 @@ export default function PostBox({ post }: PostBoxProps) {
   //코멘트창 열기
   const commentAreaRef = useRef<HTMLDivElement>(null);
   const showCommentArea = () => {
+    if (isDetail) return;
     commentAreaRef.current?.classList.toggle("show");
   };
 
@@ -144,13 +147,16 @@ export default function PostBox({ post }: PostBoxProps) {
           <div className="post__createdAt">{post?.createdAt}</div>
           {user?.uid !== post.uid && <FollowingBox post={post} />}
         </div>
-        <div className="post__box-content">
-          {editStatus ? (
-            <textarea value={editContent} onChange={onChange}></textarea>
-          ) : (
-            post?.content
-          )}
-        </div>
+        <Link to={`/post/${post.id}`}>
+          <div className="post__box-content">
+            {editStatus ? (
+              <textarea value={editContent} onChange={onChange}></textarea>
+            ) : (
+              post?.content
+            )}
+            
+          </div>
+        </Link>
 
         <div className="post-form__hashtags-output">
           {editStatus ? (
@@ -235,7 +241,7 @@ export default function PostBox({ post }: PostBoxProps) {
           </button>
         </>
       </div>
-      <div ref={commentAreaRef} className="post__comment-area">
+      <div ref={commentAreaRef} className={`post__comment-area ${isDetail ? "post__comment-area__height" : ""}`}>
         <CommentForm post={post} />
         {post?.comments?.slice(0)?.reverse()?.map((data:CommentProps, index: number)=>
          <CommentBox key={index} data={data} post={post} />

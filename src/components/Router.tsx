@@ -22,7 +22,7 @@ export default function Router({ isAuthenticated }: RouterProps) {
         <>
           <Route path="/" element={<HomePage />} />
           <Route path="/posts" element={<PostListPage />} />
-          <Route path="/posts/:id" element={<PostDetailPage />} />
+          <Route path="/post/:id" element={<PostDetailPage />} />
           <Route path="/posts/new" element={<PostNewPage />} />
           <Route path="/posts/edit/:id" element={<PostEditPage />} />
           <Route path="/profile" element={<ProfilePage />} />

@@ -431,7 +431,14 @@ a {
         background: #acacac;
       }
     }
+
+    &__height {
+      // height: auto;
+      max-height: max-content;
+      margin-bottom: 60px;
+    }
   }
+
 
 }
 
