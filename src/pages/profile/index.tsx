@@ -1,3 +1,4 @@
+import { languageState } from "atom";
 import PostBox from "components/PostBox";
 import AuthContext from "context/AuthContext";
 import {
@@ -9,15 +10,17 @@ import {
 } from "firebase/firestore";
 import { db } from "firebaseApp";
 import { PostProps } from "pages/home";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 
 export default function ProfilePage() {
   const { user } = useContext(AuthContext);
+  const [language, setLanguage] = useRecoilState(languageState);
   const [tab, setTab] = useState<string>("my");
   const [myPosts, setMyPosts] = useState<PostProps[]>([]);
   const [likesPosts, setLikesPosts] = useState<PostProps[]>([]);
 
-  const getPosts = () => {
+  const getPosts = useCallback(() => {
     if (user) {
       let postsRef = collection(db, "posts");
 
@@ -38,20 +41,31 @@ export default function ProfilePage() {
           : setLikesPosts(postsData as PostProps[]);
       });
     }
-  };
+  }, [user, tab]);
 
   useEffect(() => {
     if (user) {
       getPosts();
     }
-  }, [user, tab]);
+  }, [user, tab, getPosts]);
+
+  //language 변경
+  const onClickLanguage = () => {
+    setLanguage(language === "ko" ? "en" : "ko");
+    localStorage.setItem("myProjectLanguage", language === "ko" ? "en" : "ko");
+  };
   return (
     <div className="home">
       <div className="home__title">Profile</div>
       <div className="profile">
         <div className="profile__wrapper-flex">
           <div className="profile__image"></div>
-          <button className="profile__edit-btn">프로필 수정</button>
+          <div className="profile__flex">
+            <button className="profile__btn">프로필 수정</button>
+            <button className="profile__btn profile__btn__language" onClick={onClickLanguage}>
+              {language === "ko" ? "한국어" : "ENGLISH"}
+            </button>
+          </div>
         </div>
         <div className="profile__name">{user?.displayName}</div>
         <div className="profile__email">{user?.email}</div>

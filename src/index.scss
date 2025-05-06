@@ -536,6 +536,12 @@ a {
 .profile {
   padding: 2rem 1.2rem;
 
+  &__flex{
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
   &__wrapper-flex{
     display: flex;
     align-items: center;
@@ -549,9 +555,19 @@ a {
     border-radius: 50%;
  }
 
- &__edit-btn {
+ &__btn {
   @extend .button;
   background-color: $primary;
+
+  &__language {
+    background-color: $lightGray;
+    color: $darkGray;
+
+    &:hover {
+      background-color: $darkGray;
+      color: $white;
+    }
+  }
  }
 
  &__name {
