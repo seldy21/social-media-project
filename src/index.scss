@@ -7,6 +7,7 @@ $white: #ffffff;
 $border:#708090;
 $primary: #1e90ff;
 $primaryHover: #1670ca;
+$primaryDisabled: #38689b;
 $secondary: #a9a9a9;
 $activeBorder: #4682b4;
 $danger: #dd4141;
@@ -119,6 +120,7 @@ a {
     background-color: $backgroundLight;
     font-size: 1rem;
     border-radius: 1rem;
+    margin: 1rem 0;
 
     &:focus {
       border: 1px solid $primary;
@@ -162,6 +164,11 @@ a {
     border-bottom: 1px solid $border;
     padding: 1rem;
     background-color: $background;
+
+    &-comment {
+      font-size: 0.9rem;
+      min-height: 8rem;
+    }
   }
 
   &::placeholder {
@@ -199,7 +206,7 @@ a {
     font-family: $font;
     padding: 0.5rem;
     border: none;
-    margin: 1rem 0;
+    // margin: 1rem 0;
     width: calc(100% - 2rem);
     outline: none;
     @extend .transparent;
@@ -234,7 +241,13 @@ a {
   &__submit-btn {
     @extend .button;
     background-color: $primary;
-    font-size: 1rem;
+    font-size: 0.8rem;
+
+    &:disabled {
+      background-color: $primaryDisabled;
+      color: $white;
+      cursor: default;
+    }
   }
   
 }
@@ -368,6 +381,23 @@ a {
     &.show {
       height: 300px;
       overflow: auto;
+
+      &::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+        background: #a1a1a1;
+      }
+      &::-webkit-scrollbar-thumb {
+        border-radius: 3.5px;
+        background-color: #707070;
+    
+        &:hover {
+          background-color: #adb5bd;
+        }
+      }
+      &::-webkit-scrollbar-track {
+        background: #acacac;
+      }
     }
   }
 
@@ -391,6 +421,7 @@ a {
     border: 1px solid $lightGray;
     max-width: 680px;
     width: 100%;
+    color:#000
   }
 
   &__block {

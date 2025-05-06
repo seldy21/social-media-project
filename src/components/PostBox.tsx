@@ -13,6 +13,8 @@ import { FaCircleUser, FaRegCommentDots } from "react-icons/fa6";
 import { IoIosHeart, IoIosHeartEmpty } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import CommentForm from "./comments/CommentForm";
+import CommentBox, { CommentProps } from "./comments/CommentBox";
 
 interface PostBoxProps {
   post: PostProps;
@@ -231,7 +233,12 @@ export default function PostBox({ post }: PostBoxProps) {
           </button>
         </>
       </div>
-      <div ref={commentAreaRef} className="post__comment-area"></div>
+      <div ref={commentAreaRef} className="post__comment-area">
+        <CommentForm post={post} />
+        {post?.comments?.slice(0)?.reverse()?.map((data:CommentProps, index: number)=>
+         <CommentBox key={index} data={data} post={post} />
+        )}
+      </div>
     </div>
   );
 }

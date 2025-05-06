@@ -14,7 +14,6 @@ export default function LoginForm() {
   const [error, setError] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [passwordConfirm, setPasswordConfirm] = useState<string>("");
 
   const navigate = useNavigate();
 
@@ -26,9 +25,6 @@ export default function LoginForm() {
         break;
       case "password":
         setPassword(value);
-        break;
-      case "passwordConfirm":
-        setPasswordConfirm(value);
         break;
       default:
         break;
@@ -92,12 +88,12 @@ export default function LoginForm() {
       provider as GoogleAuthProvider | GithubAuthProvider
     )
       .then((userCredential) => {
-        const user = userCredential.user;
+        // const user = userCredential.user;
         navigate("/");
         toast.success("로그인되었습니다. 🥰🐯");
       })
       .catch((error) => {
-        const errorCode = error.code;
+        // const errorCode = error.code;
         const errorMessage = error.message;
         toast.error(errorMessage);
       });
@@ -140,7 +136,7 @@ export default function LoginForm() {
         </Link>
       </div>
       <div className="form__block">
-        <button type={"button"} className="form__submit-btn">
+        <button type={"submit"} className="form__submit-btn">
           로그인
         </button>
       </div>
