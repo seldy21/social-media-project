@@ -113,7 +113,7 @@ export default function PostForm() {
         />
         <input
           type="submit"
-          value="tweet"
+          value="upload"
           className="button post-form__submit-btn"
         />
       </div>

@@ -8,9 +8,11 @@ import { getAuth, signOut } from "firebase/auth";
 import { toast } from "react-toastify";
 import { app } from "firebaseApp";
 import { FaRegBell } from "react-icons/fa6";
+import useTranslation from "hooks/useTranslation";
 
 export default function MenuList() {
   const navigate = useNavigate();
+  const t = useTranslation();
 
   const { user } = useContext(AuthContext);
 
@@ -30,29 +32,29 @@ export default function MenuList() {
       <div className="footer__grid">
         <button type="button" onClick={() => navigate("/")}>
           <IoIosHome />
-          HOME
+          {t("MENU_HOME")}
         </button>
         <button type="button" onClick={() => navigate("/profile")}>
           <CgProfile />
-          PROFILE
+          {t("MENU_PROFILE")}
         </button>
         <button type="button" onClick={() => navigate("/search")}>
           <IoMdSearch />
-          SEARCH
+          {t("MENY_SEARCH")}
         </button>
         <button type="button" onClick={() => navigate("/notification")}>
           <FaRegBell />
-          NOTIFICATIONS
+          {t("MENU_NOTI")}
         </button>
         {user === null ? (
           <button type="button" onClick={() => navigate("/")}>
             <FiLogIn />
-            LOGIN
+            {t("MENU_LOGIN")}
           </button>
         ) : (
           <button type="button" onClick={() => onSignOut()}>
             <FiLogOut />
-            LOGOUT
+            {t("MENU_LOGOUT")}
           </button>
         )}
       </div>
