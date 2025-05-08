@@ -32,29 +32,29 @@ export default function MenuList() {
       <div className="footer__grid">
         <button type="button" onClick={() => navigate("/")}>
           <IoIosHome />
-          {t("MENU_HOME")}
+          <span className="footer__grid-text">{t("MENU_HOME")}</span>
         </button>
         <button type="button" onClick={() => navigate("/profile")}>
           <CgProfile />
-          {t("MENU_PROFILE")}
+          <span className="footer__grid-text"> {t("MENU_PROFILE")}</span>
         </button>
         <button type="button" onClick={() => navigate("/search")}>
           <IoMdSearch />
-          {t("MENY_SEARCH")}
+          <span className="footer__grid-text">{t("MENY_SEARCH")}</span>
         </button>
         <button type="button" onClick={() => navigate("/notification")}>
           <FaRegBell />
-          {t("MENU_NOTI")}
+          <span className="footer__grid-text">{t("MENU_NOTI")}</span>
         </button>
         {user === null ? (
           <button type="button" onClick={() => navigate("/")}>
             <FiLogIn />
-            {t("MENU_LOGIN")}
+            <span className="footer__grid-text">{t("MENU_LOGIN")}</span>
           </button>
         ) : (
           <button type="button" onClick={() => onSignOut()}>
             <FiLogOut />
-            {t("MENU_LOGOUT")}
+            <span className="footer__grid-text">{t("MENU_LOGOUT")}</span>
           </button>
         )}
       </div>
